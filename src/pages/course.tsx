@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { Stars } from '../components/ui/stars';
 import { CheckIcon } from '@chakra-ui/icons';
 import { setLazyProp } from 'next/dist/server/api-utils';
+import { ReviewModal } from '@/components/ui/modals/review-modal';
 
 export default function Home() {
     const [id, setId] = useState("");
@@ -16,6 +17,8 @@ export default function Home() {
     const [course, setCourse] = useState<any>();
     const [purchased, setPurchased] = useState(false);
     const [isOwner, setIsOwner] = useState(false);
+
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
     const init = (logged: boolean) => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -133,7 +136,7 @@ export default function Home() {
                                 </Box>
                                 <Box mt={10}>
                                     <Box fontSize="32">Reviews</Box>
-                                    {calcCourseProgress() >= 50 && <Button size="sm" mb={5}>Add review</Button>}
+                                    {calcCourseProgress() >= 50 && <Button size="sm" mb={5} onClick={() => setIsReviewModalOpen(true)}>Add review</Button>}
                                     <Box>
                                         {course.reviewsDTO.length == 0 && <Box>No reviews yet</Box>}
                                         {course.reviewsDTO.map((e: any) => (
@@ -151,6 +154,7 @@ export default function Home() {
                     </Box>
                 }
             </Box>
+            <ReviewModal isOpen={isReviewModalOpen} onClose={() => {setIsReviewModalOpen(false)}} courseId={course ? course.id : -1}></ReviewModal>
         </>
     )
 }

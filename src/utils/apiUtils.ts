@@ -47,6 +47,7 @@ export function apiPOSTAuth(route: string, body: any) {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': "Bearer" + getCookie("token")
             }
         }).then(response => response.json())

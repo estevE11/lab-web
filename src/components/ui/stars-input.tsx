@@ -1,17 +1,23 @@
 import { Box, Icon } from "@chakra-ui/react"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export const StarsInput = () => {
-    const [value, setValue] = useState(0);    
+
+type StarsInputProps = {
+    onChange: (value: number) => void;
+}
+
+export const StarsInput = ({onChange}: StarsInputProps) => {
+    const [val, setVal] = useState(0);    
 
     const onClick = (i: number) => {
-        setValue(i + 1);
+        onChange(i + 1);
+        setVal(i+1)
     }
 
     return (
         <Box>
             {Array.from(Array(5).keys()).map((i: number) => {
-                const color = i < value ? "yellow.500" : "gray.300";
+                const color = i < val ? "yellow.500" : "gray.300";
                 return (
                     <Icon onClick={() => onClick(i)} style={{cursor: "pointer"}} key={i} color={color} w={5} h={5} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" />
