@@ -1,3 +1,4 @@
+import { Header } from '@/components/ui/header';
 import { apiGET, apiGETAuth, apiPOSTAuth } from '@/utils/apiUtils';
 import { checkToken } from '@/utils/cookieUtils';
 import { Box, Button, Checkbox } from '@chakra-ui/react';
@@ -5,28 +6,17 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react';
 
 export default function Home() {
-
     const [id, setId] = useState("");
 
     const [course, setCourse] = useState<any>();
-    const [logged, setLogged] = useState(false);
     const [purchased, setPurchased] = useState(false);
 
-    const redirect = (path: string) => {
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.split('/').slice(0, 3).join('/');
-        const absoluteUrl = `${baseUrl}${path}`;
-        window.location.href = absoluteUrl;
-    }
-
-    useEffect(() => {
+    const init = (logged: boolean) => {
         const urlParams = new URLSearchParams(window.location.search);
         const _id = urlParams.get('id');
         setId(_id || "");
 
-        const l = checkToken();
-        setLogged(l);
-        if (!l) {
+        if (!logged) {
             apiGET("/courses/" + _id).then((data: any) => {
                 setCourse(data);
             }) 
@@ -36,7 +26,7 @@ export default function Home() {
                 setCourse(data);
             }) 
         }
-    }, []);
+    };
 
     const purchase = () => {
         apiPOSTAuth("/courses/" + id + "/purchase", {}).then((data: any) => {
@@ -53,14 +43,7 @@ export default function Home() {
             </Head>
 
             <Box m={2}>
-                <Box>
-                    {logged &&
-                        ( "User: " + localStorage.getItem("username") )
-                    }
-                    {!logged &&
-                        <Button onClick={() => {redirect("/login")}}>Login</Button>
-                    }
-                </Box>
+                <Header onInit={init}></Header>
                 { course && 
                     <Box>
                         <Box fontSize={25}>{course.title}</Box>

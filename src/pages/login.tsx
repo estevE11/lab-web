@@ -1,5 +1,6 @@
 import { apiGET, apiPOST } from '@/utils/apiUtils';
 import { setCookie } from '@/utils/cookieUtils';
+import { redirect } from '@/utils/webUtils';
 import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
@@ -22,13 +23,6 @@ export default function Login() {
         password: ''
     })
 
-    const redirect = (path: string) => {
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.split('/').slice(0, 3).join('/');
-        const absoluteUrl = `${baseUrl}${path}`;
-        window.location.href = absoluteUrl;
-    }
-    
     const attemptLogin = () => {
         apiPOST("/authenticate", { username: values.username, password: values.password }).then((data: any) => {
             setCookie("token", data.access_token, 10);

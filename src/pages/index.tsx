@@ -3,22 +3,14 @@ import { checkToken, deleteCookie } from '@/utils/cookieUtils';
 import { Box, Button } from '@chakra-ui/react';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
-
+import { Header } from '../components/ui/header';
+import { redirect } from '@/utils/webUtils';
+ 
 export default function Home() {
 
     const [courses, setCourses] = useState<any[]>([]);
-    const [logged, setLogged] = useState(false);
 
-    const redirect = (path: string) => {
-        const currentUrl = window.location.href;
-        const baseUrl = currentUrl.split('/').slice(0, 3).join('/');
-        const absoluteUrl = `${baseUrl}${path}`;
-        window.location.href = absoluteUrl;
-    }
-
-    useEffect(() => {
-        const logged = checkToken();
-        setLogged(logged);
+    const init = (logged: boolean) => {
         if (logged) {
             apiGET("/courses").then((data: any) => {
                 setCourses(data);
@@ -28,13 +20,8 @@ export default function Home() {
                 setCourses(data);
             }) 
         }
-    }, []);
+    };
 
-    const logout = () => {
-        deleteCookie("token");
-        localStorage.removeItem("username");
-        redirect("/");
-    }
     
 
     return (
@@ -45,18 +32,9 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
+            <Header onInit={ init }></Header>
+
             <Box m={2}>
-                <Box>
-                    {logged &&
-                        <Box>
-                            <span>User: { localStorage.getItem("username") }</span>
-                            <Button size={"sm"} ml={3} colorScheme='red' onClick={logout}>Log out</Button>
-                        </Box>
-                    }
-                    {!logged &&
-                        <Button onClick={() => {redirect("/login")}}>Login</Button>
-                    }
-                </Box>
                 <Box fontSize={25}>Courses</Box>
                 <Box>
                     {courses?.map((course: any, index: number) => (
