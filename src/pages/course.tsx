@@ -12,6 +12,7 @@ export default function Home() {
 
     const [course, setCourse] = useState<any>();
     const [purchased, setPurchased] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
 
     const init = (logged: boolean) => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -25,6 +26,7 @@ export default function Home() {
         } else {
             apiGETAuth("/courses/" + _id).then((data: any) => {
                 setPurchased(Object.keys(data).includes("lessons"));
+                setIsOwner(data.creatorDTO.username == localStorage.getItem("username"));
                 setCourse(data);
                 console.log(data);
             }) 
@@ -76,6 +78,9 @@ export default function Home() {
                 <Header onInit={init}></Header>
                 { course && 
                     <Box>
+                        {isOwner &&
+                            <Button size="sm">Edit course</Button>
+                        }
                         <Box fontSize={32}>
                             {course.title}
                             <Badge ml={3} colorScheme='green'>{course.categoryDTO.name}</Badge>
