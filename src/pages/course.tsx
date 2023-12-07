@@ -6,9 +6,12 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react';
 import { Stars } from '../components/ui/stars';
 import { CheckIcon } from '@chakra-ui/icons';
+import { setLazyProp } from 'next/dist/server/api-utils';
 
 export default function Home() {
     const [id, setId] = useState("");
+
+    const [logged, setLogged] = useState(false);
 
     const [course, setCourse] = useState<any>();
     const [purchased, setPurchased] = useState(false);
@@ -18,6 +21,8 @@ export default function Home() {
         const urlParams = new URLSearchParams(window.location.search);
         const _id = urlParams.get('id');
         setId(_id || "");
+
+        setLogged(logged);
 
         if (!logged) {
             apiGET("/courses/" + _id).then((data: any) => {
@@ -90,9 +95,11 @@ export default function Home() {
                         <Box mb={3}>{course.description}</Box>
                         <Box>Author: {course.creatorDTO.name} {course.creatorDTO.secondName}</Box>
                         {!purchased && <Box><Badge colorScheme='green' fontSize={20} mt={3}>{course.price}€</Badge></Box>}
-                        {!purchased ?
+                        { logged && !purchased &&
                             <Button colorScheme="green" onClick={purchase} mt={3}>Purchase</Button>
-                            :
+                            
+                        }
+                        { purchased &&
                             <>
                                 <Box mt={10}>
                                     <Box fontSize="32">Lessons <Box as="span" fontSize={16}>({ calcCourseProgress() }%)</Box></Box>
