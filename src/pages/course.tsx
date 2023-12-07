@@ -37,6 +37,12 @@ export default function Home() {
         });
     }
 
+    const markAsDone = (lessonId: number) => {
+        apiPOSTAuth("/courses/" + id + "/lessons/" + lessonId + "/done", {}).then((data: any) => {
+            location.reload();
+        });
+    }
+
     const isDone = (lessonId: number) => {
         const lessonsDone = course.lessonsDone;
         return lessonsDone.filter((e: any) => e.id == lessonId).length > 0;
@@ -52,6 +58,11 @@ export default function Home() {
         return true;
     }
 
+    const calcCourseProgress = () => {
+        return course.lessonsDone.length / course.lessons.length * 100;
+    }
+
+
     return (
         <>
             <Head>
@@ -64,21 +75,21 @@ export default function Home() {
                 <Header onInit={init}></Header>
                 { course && 
                     <Box>
-                        <Box fontSize={25}>
+                        <Box fontSize={32}>
                             {course.title}
                             <Badge ml={3} colorScheme='green'>{course.categoryDTO.name}</Badge>
                             <Badge ml={3}>{course.publicationDate.substring(0, 4)}</Badge>
                             <Badge ml={3}>{course.languageDTO.name.substring(0, 3)}</Badge>
                         </Box>
                         <Box>{course.description}</Box>
-                        <Box>Author: {course.creatorDTO.name} {course.creatorDTO.secondName}</Box>
+                        <Box mt={3}>Author: {course.creatorDTO.name} {course.creatorDTO.secondName}</Box>
                         <Box>Price: {course.price}€</Box>
                         {!purchased ?
                             <Button colorScheme="green" onClick={purchase}>Purchase</Button>
                             :
                             <>
                                 <Box mt={10}>
-                                    <Box fontSize="32">Lessons</Box>
+                                    <Box fontSize="32">Lessons <Box as="span" fontSize={16}>({ calcCourseProgress() }%)</Box></Box>
                                     <table>
                                         <tbody>
                                             {course.lessons.map((e: any, index: number) => {
@@ -94,6 +105,7 @@ export default function Home() {
                                                                     colorScheme='teal'
                                                                     aria-label='Done'
                                                                     fontSize='15px'
+                                                                    onClick={() => markAsDone(e.id)}
                                                                 >Mark as done</Button>
                                                             }
 
@@ -107,11 +119,12 @@ export default function Home() {
                                 </Box>
                                 <Box mt={10}>
                                     <Box fontSize="32">Reviews</Box>
+                                    {calcCourseProgress() >= 50 && <Button size="sm" mb={5}>Add review</Button>}
                                     <Box>
                                         {course.reviewsDTO.map((e: any) => (
                                             <Box>
-                                                <Box fontSize={20}>{e.title}</Box>
                                                 <Stars rating={e.satisfaction}></Stars>
+                                                <Box as="span" fontSize={20}>{e.title}</Box>
                                                 <Box>{e.content}</Box>
                                                 <Divider></Divider>
                                             </Box>
