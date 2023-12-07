@@ -1,9 +1,10 @@
 import { Header } from '@/components/ui/header';
 import { apiGET, apiGETAuth, apiPOSTAuth } from '@/utils/apiUtils';
 import { checkToken } from '@/utils/cookieUtils';
-import { Box, Button, Checkbox } from '@chakra-ui/react';
+import { Badge, Box, Button, Checkbox, Divider } from '@chakra-ui/react';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
+import { Stars } from '../components/ui/stars';
 
 export default function Home() {
     const [id, setId] = useState("");
@@ -24,6 +25,7 @@ export default function Home() {
             apiGETAuth("/courses/" + _id).then((data: any) => {
                 setPurchased(Object.keys(data).includes("lessons"));
                 setCourse(data);
+                console.log(data);
             }) 
         }
     };
@@ -46,25 +48,46 @@ export default function Home() {
                 <Header onInit={init}></Header>
                 { course && 
                     <Box>
-                        <Box fontSize={25}>{course.title}</Box>
+                        <Box fontSize={25}>
+                            {course.title}
+                            <Badge ml={3} colorScheme='green'>{course.categoryDTO.name}</Badge>
+                            <Badge ml={3}>{course.publicationDate.split(0, 4)}</Badge>
+                            <Badge ml={3}>{course.languageDTO.name.substring(0, 3)}</Badge>
+                        </Box>
                         <Box>{course.description}</Box>
+                        <Box>Author: {course.creatorDTO.name} {course.creatorDTO.secondName}</Box>
                         <Box>Price: {course.price}€</Box>
                         {!purchased ?
                             <Button colorScheme="green" onClick={purchase}>Purchase</Button>
                             :
-                            <Box>
-                                <Box fontSize="32">Lessons</Box>
-                                <table>
-                                    <tbody>
-                                    {course.lessons.map((e: any) => (
-                                        <tr>
-                                            <td>{e.title}</td>
-                                            <td><Checkbox></Checkbox></td>
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
-                            </Box>
+                            <>
+                                <Box>
+                                    <Box fontSize="32">Lessons</Box>
+                                    <table>
+                                        <tbody>
+                                        {course.lessons.map((e: any) => (
+                                            <tr>
+                                                <td>{e.title}</td>
+                                                <td><Checkbox></Checkbox></td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </Box>
+                                <Box mt={10}>
+                                    <Box fontSize="32">Reviews</Box>
+                                    <Box>
+                                        {course.reviewsDTO.map((e: any) => (
+                                            <Box>
+                                                <Box fontSize={20}>{e.title}</Box>
+                                                <Stars rating={e.satisfaction}></Stars>
+                                                <Box>{e.content}</Box>
+                                                <Divider></Divider>
+                                            </Box>
+                                        ))}
+                                    </Box>
+                                </Box>
+                            </>
                         }
                     </Box>
                 }
