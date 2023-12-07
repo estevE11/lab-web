@@ -51,7 +51,7 @@ export default function Home() {
                         <Box fontSize={25}>
                             {course.title}
                             <Badge ml={3} colorScheme='green'>{course.categoryDTO.name}</Badge>
-                            <Badge ml={3}>{course.publicationDate.split(0, 4)}</Badge>
+                            <Badge ml={3}>{course.publicationDate.substring(0, 4)}</Badge>
                             <Badge ml={3}>{course.languageDTO.name.substring(0, 3)}</Badge>
                         </Box>
                         <Box>{course.description}</Box>
@@ -61,7 +61,7 @@ export default function Home() {
                             <Button colorScheme="green" onClick={purchase}>Purchase</Button>
                             :
                             <>
-                                <Box>
+                                <Box mt={10}>
                                     <Box fontSize="32">Lessons</Box>
                                     <table>
                                         <tbody>
