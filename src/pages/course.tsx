@@ -140,11 +140,11 @@ export default function Home() {
                                     <Box>
                                         {course.reviewsDTO.length == 0 && <Box>No reviews yet</Box>}
                                         {course.reviewsDTO.map((e: any) => (
-                                            <Box>
+                                            <Box mt={2}>
                                                 <Stars rating={e.satisfaction}></Stars>
                                                 <Box as="span" fontSize={20}>{e.title}</Box>
                                                 <Box>{e.content}</Box>
-                                                <Divider></Divider>
+                                                <Divider mt={2}></Divider>
                                             </Box>
                                         ))}
                                     </Box>
