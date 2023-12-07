@@ -67,7 +67,7 @@ export default function Home() {
                                         <tbody>
                                         {course.lessons.map((e: any) => (
                                             <tr>
-                                                <td>{e.title}</td>
+                                                <Box as="td" pr={5}>{e.title}</Box>
                                                 <td><Checkbox></Checkbox></td>
                                             </tr>
                                         ))}

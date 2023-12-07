@@ -20,11 +20,11 @@ export const Header = ({onInit} : {onInit: (logged: boolean) => void}) => {
     }
 
     return (
-        <Box>
+        <Box mb={5}>
             {logged &&
                 <Box>
-                    <span>User: { localStorage.getItem("username") }</span>
-                    <Button size={"sm"} ml={3} colorScheme='red' onClick={logout}>Log out</Button>
+                    <Button size={"sm"} colorScheme='red' onClick={logout}>Log out</Button>
+                    <Box as={"span"} ml={3}>User: { localStorage.getItem("username") }</Box>
                 </Box>
             }
             {!logged &&
