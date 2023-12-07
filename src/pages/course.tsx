@@ -1,12 +1,10 @@
 import { Header } from '@/components/ui/header';
 import { apiGET, apiGETAuth, apiPOSTAuth } from '@/utils/apiUtils';
-import { checkToken } from '@/utils/cookieUtils';
-import { Badge, Box, Button, Checkbox, Divider, Icon, IconButton } from '@chakra-ui/react';
+import { Badge, Box, Button, Divider } from '@chakra-ui/react';
 import Head from 'next/head'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Stars } from '../components/ui/stars';
 import { CheckIcon } from '@chakra-ui/icons';
-import { setLazyProp } from 'next/dist/server/api-utils';
 import { ReviewModal } from '@/components/ui/modals/review-modal';
 
 export default function Home() {

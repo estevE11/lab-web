@@ -1,8 +1,7 @@
 import { apiGET, apiGETAuth } from '@/utils/apiUtils';
-import { checkToken, deleteCookie } from '@/utils/cookieUtils';
-import { Box, Button, Input } from '@chakra-ui/react';
+import { Box, Input } from '@chakra-ui/react';
 import Head from 'next/head'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Header } from '../components/ui/header';
 import { redirect } from '@/utils/webUtils';
  

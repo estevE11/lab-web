@@ -1,5 +1,5 @@
 import { Box, Icon } from "@chakra-ui/react"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 type StarsInputProps = {
