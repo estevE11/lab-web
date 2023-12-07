@@ -59,6 +59,7 @@ export default function Home() {
     }
 
     const calcCourseProgress = () => {
+        if (course.lessons.length == 0) return 0;
         return course.lessonsDone.length / course.lessons.length * 100;
     }
 
@@ -81,15 +82,16 @@ export default function Home() {
                             <Badge ml={3}>{course.publicationDate.substring(0, 4)}</Badge>
                             <Badge ml={3}>{course.languageDTO.name.substring(0, 3)}</Badge>
                         </Box>
-                        <Box>{course.description}</Box>
-                        <Box mt={3}>Author: {course.creatorDTO.name} {course.creatorDTO.secondName}</Box>
-                        <Box>Price: {course.price}€</Box>
+                        <Box mb={3}>{course.description}</Box>
+                        <Box>Author: {course.creatorDTO.name} {course.creatorDTO.secondName}</Box>
+                        {!purchased && <Box><Badge colorScheme='green' fontSize={20} mt={3}>{course.price}€</Badge></Box>}
                         {!purchased ?
-                            <Button colorScheme="green" onClick={purchase}>Purchase</Button>
+                            <Button colorScheme="green" onClick={purchase} mt={3}>Purchase</Button>
                             :
                             <>
                                 <Box mt={10}>
                                     <Box fontSize="32">Lessons <Box as="span" fontSize={16}>({ calcCourseProgress() }%)</Box></Box>
+                                    {course.lessons.length == 0 && <Box>No lessons yet</Box>}
                                     <table>
                                         <tbody>
                                             {course.lessons.map((e: any, index: number) => {
@@ -121,6 +123,7 @@ export default function Home() {
                                     <Box fontSize="32">Reviews</Box>
                                     {calcCourseProgress() >= 50 && <Button size="sm" mb={5}>Add review</Button>}
                                     <Box>
+                                        {course.reviewsDTO.length == 0 && <Box>No reviews yet</Box>}
                                         {course.reviewsDTO.map((e: any) => (
                                             <Box>
                                                 <Stars rating={e.satisfaction}></Stars>
