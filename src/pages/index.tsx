@@ -11,7 +11,7 @@ export default function Home() {
     const [courses, setCourses] = useState<any[]>([]);
 
     const init = (logged: boolean) => {
-        if (logged) {
+        if (!logged) {
             apiGET("/courses").then((data: any) => {
                 setCourses(data);
             }) 
