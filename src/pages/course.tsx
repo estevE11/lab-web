@@ -1,10 +1,11 @@
 import { Header } from '@/components/ui/header';
 import { apiGET, apiGETAuth, apiPOSTAuth } from '@/utils/apiUtils';
 import { checkToken } from '@/utils/cookieUtils';
-import { Badge, Box, Button, Checkbox, Divider } from '@chakra-ui/react';
+import { Badge, Box, Button, Checkbox, Divider, Icon, IconButton } from '@chakra-ui/react';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
 import { Stars } from '../components/ui/stars';
+import { CheckIcon } from '@chakra-ui/icons';
 
 export default function Home() {
     const [id, setId] = useState("");
@@ -36,6 +37,21 @@ export default function Home() {
         });
     }
 
+    const isDone = (lessonId: number) => {
+        const lessonsDone = course.lessonsDone;
+        return lessonsDone.filter((e: any) => e.id == lessonId).length > 0;
+    }
+
+    const canBeChecked = (lessonIndex: number) => {
+        for (let i = 0; i < lessonIndex; i++) { 
+            if (!isDone(course.lessons[i].id)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     return (
         <>
             <Head>
@@ -65,12 +81,27 @@ export default function Home() {
                                     <Box fontSize="32">Lessons</Box>
                                     <table>
                                         <tbody>
-                                        {course.lessons.map((e: any) => (
-                                            <tr>
-                                                <Box as="td" pr={5}>{e.title}</Box>
-                                                <td><Checkbox></Checkbox></td>
-                                            </tr>
-                                        ))}
+                                            {course.lessons.map((e: any, index: number) => {
+                                                const done = isDone(e.id);
+                                                return (
+                                                    <tr>
+                                                        <Box as="td" pr={5}>{e.title}</Box>
+                                                        <td>
+                                                            {!done && canBeChecked(index) &&
+                                                                <Button
+                                                                    size={"sm"}
+                                                                    variant='solid'
+                                                                    colorScheme='teal'
+                                                                    aria-label='Done'
+                                                                    fontSize='15px'
+                                                                >Mark as done</Button>
+                                                            }
+
+                                                            {done && <CheckIcon></CheckIcon>}
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
                                         </tbody>
                                     </table>
                                 </Box>
