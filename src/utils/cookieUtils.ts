@@ -21,6 +21,11 @@ export function getCookie(key: string): string {
     return "";
 }
 
+// Create a function to delete a cookie
+export function deleteCookie(key: string) {
+    document.cookie = key + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
 export function checkToken(): boolean {
     let token = getCookie("token");
     return token != "";

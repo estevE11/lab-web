@@ -4,7 +4,18 @@ import { Box, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
 
+type User = {
+    username: string,
+    password: string
+}
+
 export default function Login() {
+    const [testUsers, setTestUsers] = useState<User[]>([
+        { username: "rogeresteve", password: "password123" },
+        { username: "ek_ziad", password: "password123" },
+        { username: "donatello", password: "password123" },
+        { username: "urimaltas", password: "password123" }
+    ]);
 
     const [values, setValues] = useState({
         username: '',
@@ -35,17 +46,38 @@ export default function Login() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <Box m={2}>
-                <FormControl>
-                    <FormLabel>Username</FormLabel>
-                    <Input placeholder='Username' value={values.username} onChange={(e) => setValues({...values, username: e.target.value})} />
-                </FormControl>
-                <FormControl>
-                    <FormLabel>Password</FormLabel>
-                    <Input type="password" placeholder='Password' value={values.password} onChange={(e) => setValues({...values, password: e.target.value})}/>
-                </FormControl>
-                <Button onClick={() => {attemptLogin()}}>Login</Button>
+            <Box p={3}>
+                <Box>
+                    {testUsers.map((user: User) => {
+                        return (
+                            <Button
+                                mr="3"
+                                onClick={() => {
+                                    values.username = user.username;
+                                    values.password = user.password;
+                                    setValues({ ...values });
+                                    attemptLogin();
+                                } }
+                            >
+                                {user.username}
+                            </Button>
+                        )
+                    })}
+                </Box>
+
+                <Box m={2}>
+                    <FormControl>
+                        <FormLabel>Username</FormLabel>
+                        <Input placeholder='Username' value={values.username} onChange={(e) => setValues({...values, username: e.target.value})} />
+                    </FormControl>
+                    <FormControl mt={3}>
+                        <FormLabel>Password</FormLabel>
+                        <Input type="password" placeholder='Password' value={values.password} onChange={(e) => setValues({...values, password: e.target.value})}/>
+                    </FormControl>
+                    <Button onClick={() => {attemptLogin()}}>Login</Button>
+                </Box>
             </Box>
+
         </>
     )
 }

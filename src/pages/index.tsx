@@ -1,5 +1,5 @@
 import { apiGET, apiGETAuth } from '@/utils/apiUtils';
-import { checkToken } from '@/utils/cookieUtils';
+import { checkToken, deleteCookie } from '@/utils/cookieUtils';
 import { Box, Button } from '@chakra-ui/react';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
@@ -30,6 +30,13 @@ export default function Home() {
         }
     }, []);
 
+    const logout = () => {
+        deleteCookie("token");
+        localStorage.removeItem("username");
+        redirect("/");
+    }
+    
+
     return (
         <>
             <Head>
@@ -41,7 +48,10 @@ export default function Home() {
             <Box m={2}>
                 <Box>
                     {logged &&
-                        ( "User: " + localStorage.getItem("username") )
+                        <Box>
+                            <span>User: { localStorage.getItem("username") }</span>
+                            <Button size={"sm"} ml={3} colorScheme='red' onClick={logout}>Log out</Button>
+                        </Box>
                     }
                     {!logged &&
                         <Button onClick={() => {redirect("/login")}}>Login</Button>
