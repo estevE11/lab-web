@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Stars } from '../components/ui/stars';
 import { CheckIcon } from '@chakra-ui/icons';
 import { ReviewModal } from '@/components/ui/modals/review-modal';
+import { CourseModal } from '@/components/ui/modals/course-modal';
 
 export default function Home() {
     const [id, setId] = useState("");
@@ -17,6 +18,7 @@ export default function Home() {
     const [isOwner, setIsOwner] = useState(false);
 
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
 
     const init = (logged: boolean) => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -86,7 +88,7 @@ export default function Home() {
                 { course && 
                     <Box>
                         {isOwner &&
-                            <Button size="sm">Edit course</Button>
+                            <Button size="sm" onClick={() => setIsCourseModalOpen(true)}>Edit course</Button>
                         }
                         <Box fontSize={32}>
                             {course.title}
@@ -154,6 +156,7 @@ export default function Home() {
                 }
             </Box>
             <ReviewModal isOpen={isReviewModalOpen} onClose={() => {setIsReviewModalOpen(false)}} courseId={course ? course.id : -1}></ReviewModal>
+            <CourseModal isOpen={isCourseModalOpen} onClose={() => { setIsCourseModalOpen(false) }} courseId={course ? course.id : -1} courseData={course}></CourseModal>
         </>
     )
 }
