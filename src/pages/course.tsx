@@ -67,6 +67,7 @@ export default function Home() {
     }
 
     const calcCourseProgress = () => {
+        if (!course || !course.lessonsDone || !course.lessons) return 0;
         if (course.lessons.length == 0) return 0;
         return course.lessonsDone.length / course.lessons.length * 100;
     }
@@ -132,23 +133,23 @@ export default function Home() {
                                         </tbody>
                                     </table>
                                 </Box>
-                                <Box mt={10}>
-                                    <Box fontSize="32">Reviews</Box>
-                                    {calcCourseProgress() >= 50 && <Button size="sm" mb={5} onClick={() => setIsReviewModalOpen(true)}>Add review</Button>}
-                                    <Box>
-                                        {course.reviewsDTO.length == 0 && <Box>No reviews yet</Box>}
-                                        {course.reviewsDTO.map((e: any) => (
-                                            <Box mt={2}>
-                                                <Stars rating={e.satisfaction}></Stars>
-                                                <Box as="span" fontSize={20}>{e.title}</Box>
-                                                <Box>{e.content}</Box>
-                                                <Divider mt={2}></Divider>
-                                            </Box>
-                                        ))}
-                                    </Box>
-                                </Box>
                             </>
                         }
+                        <Box mt={10}>
+                            <Box fontSize="32">Reviews</Box>
+                            {calcCourseProgress() >= 50 && <Button size="sm" mb={5} onClick={() => setIsReviewModalOpen(true)}>Add review</Button>}
+                            <Box>
+                                {course.reviewsDTO.length == 0 && <Box>No reviews yet</Box>}
+                                {course.reviewsDTO.map((e: any) => (
+                                    <Box mt={2}>
+                                        <Stars rating={e.satisfaction}></Stars>
+                                        <Box as="span" fontSize={20}>{e.title}</Box>
+                                        <Box>{e.content}</Box>
+                                        <Divider mt={2}></Divider>
+                                    </Box>
+                                ))}
+                            </Box>
+                        </Box>
                     </Box>
                 }
             </Box>

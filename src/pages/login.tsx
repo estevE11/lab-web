@@ -27,6 +27,7 @@ export default function Login() {
         apiPOST("/authenticate", { username: values.username, password: values.password }).then((data: any) => {
             setCookie("token", data.access_token, 10);
             localStorage.setItem("username", values.username);
+            console.log(data);
             redirect("/");
         });
     }
